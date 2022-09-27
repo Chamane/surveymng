@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=surveymng
+POSTGRES_USER=gsbbocfixuQiHMXqttBlgOmTbYxZWLfd
+POSTGRES_PASSWORD=8gqOxVpmpz7rr3oFfoYmu6EUbz6Bb5eRI1W19izi3IouD28Dw7kqECxS0m2TaB6G
