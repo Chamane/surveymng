@@ -35,7 +35,7 @@
   </head>
 
   <body>
-
+    {% block main %}
     <div class="mb-1">
       <nav class="navbar navbar-expand-md navbar-light bg-light">
         <div class="container-fluid">
@@ -92,11 +92,12 @@
       {% endif %}
 
       {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
       {% endblock content %}
 
-    </div> <!-- /container -->
 
+
+    </div> <!-- /container -->
+    {% endblock main %}
     {% block modal %}{% endblock modal %}
 
     {% block inline_javascript %}

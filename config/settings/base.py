@@ -260,7 +260,7 @@ LOGGING = {
 
 # django-allauth
 # ------------------------------------------------------------------------------
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -275,7 +275,7 @@ ACCOUNT_FORMS = {"signup": "surveymng.users.forms.UserSignupForm"}
 SOCIALACCOUNT_ADAPTER = "surveymng.users.adapters.SocialAccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/forms.html
 SOCIALACCOUNT_FORMS = {"signup": "surveymng.users.forms.UserSocialSignupForm"}
-
+ACCOUNT_LOGOUT_ON_GET = True
 
 # Your stuff...
 # ------------------------------------------------------------------------------

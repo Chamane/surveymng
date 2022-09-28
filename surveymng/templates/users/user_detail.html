@@ -3,7 +3,8 @@
 
 {% block title %}User: {{ object.username }}{% endblock %}
 
-{% block content %}
+{% block main %}
+{{block.super}}
 <div class="container">
 
   <div class="row">
@@ -31,4 +32,4 @@
 {% endif %}
 
 </div>
-{% endblock content %}
+{% endblock main %}
