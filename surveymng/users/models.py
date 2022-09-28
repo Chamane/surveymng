@@ -16,7 +16,7 @@ class User(AbstractUser):
     first_name = None  # type: ignore
     last_name = None  # type: ignore
 
-    is_admin = BooleanField(default=False, verbose_name="type compte")
+    is_admin = BooleanField(default=True)
 
     def get_absolute_url(self):
         """Get url for user's detail view.
