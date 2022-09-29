@@ -1,4 +1,10 @@
-from django.shortcuts import redirect
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.shortcuts import redirect, render
+
+from . import forms
+
+User = get_user_model()
 
 
 def index(request):
@@ -6,7 +12,25 @@ def index(request):
 
 
 def create_agent(request):
-    pass
+    if request.method == "POST":
+        form = forms.AgentForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data["password"] == form.cleaned_data["re_password"]:
+                user = User(
+                    username=form.cleaned_data["username"],
+                    name=form.cleaned_data["fullname"],
+                    email=form.cleaned_data["email"],
+                )
+                user.save()
+                user.set_password(form.cleaned_data["password"])
+                messages.success(request, "User succesfully created")
+                return redirect("users:detail", username=request.user.username)
+            else:
+                messages.error(request, "Password didnt match")
+    else:
+        form = forms.AgentForm()
+
+    return render(request, "survey/create_agent.html", {"form": form})
 
 
 def create_survey(request):
