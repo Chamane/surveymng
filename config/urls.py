@@ -5,7 +5,7 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
-from surveymng.main.views import create_agent, index
+from surveymng.main.views import agent_looking, create_agent, index
 
 urlpatterns = [
     path("", index, name="home"),
@@ -20,6 +20,7 @@ urlpatterns = [
     # Your stuff:
     # create agent
     path("create/agent", create_agent, name="create-agent"),
+    path("search/agent", agent_looking, name="search-agent"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

@@ -33,6 +33,23 @@ def create_agent(request):
     return render(request, "survey/create_agent.html", {"form": form})
 
 
+def agent_looking(request):
+    try:
+        lookup_value = request.POST["lookup_value"]
+    except Exception:
+        lookup_value = None
+
+    if lookup_value:
+        try:
+            user = User.objects.get(username=lookup_value)
+        except Exception:
+            user = None
+    else:
+        user = None
+
+    return render(request, "survey/agent_looking.html", {"agent": user})
+
+
 def create_survey(request):
     pass
 

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+{{block.super}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        Rechercher un agent
+                    </h3>
+                    <form action="{% url 'search-agent' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" class="form-control" name="lookup_value" placeholder="username">
+                            </div>
+                            <div class="col-4">
+                                <input type="submit" class="btn btn-primary" value="rechercher">
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            {% if agent %}
+                            <h5 class="card-title">{{agent.username}}</h5>
+                            <p class="card-subtitle">{{agent.name}}</p>
+                            {% else %}
+                            <p>Aucun agent avec cet username trouvé. Essayez un autre keyword...</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}
