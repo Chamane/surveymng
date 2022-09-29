@@ -7,7 +7,7 @@
 {{block.super}}
 <div class="container">
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-sm-12">
 
       <h2>{{ object.username }}</h2>
@@ -15,16 +15,39 @@
         <p>{{ object.name }}</p>
       {% endif %}
     </div>
-  </div>
+  </div> -->
 
 {% if object == request.user %}
 <!-- Action buttons -->
 <div class="row">
 
   <div class="col-sm-12">
-    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
-    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
-    <!-- Your Stuff: Custom user template urls -->
+    <!-- <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
+    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a> -->
+    {% if object.is_admin %}
+    <div class="card mt-3">
+      <div class="card-body">
+        <h3 class="card-title">Agents</h3>
+        <p class="card-subtitle">Gestion des agents</p>
+        <a href="#" class="btn btn-primary mt-2"> Créer un agent</a>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <h3 class="card-title">Enquêtes</h3>
+        <p class="card-subtitle">Gestion des enquêtes</p>
+        <a href="#" class="btn btn-primary mt-2">Créer un questionnaire</a>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <h3 class="card-title">Formulaire</h3>
+        <p class="card-subtitle">Gestion des formulaires d'enquête</p>
+        <a href="#" class="btn btn-primary mt-2">Remplir un questionnaire</a>
+      </div>
+    </div>
+    {% else %}
+    {% endif %}
   </div>
 
 </div>
