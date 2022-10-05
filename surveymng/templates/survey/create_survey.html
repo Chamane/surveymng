@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+{{block.super}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        Créer une enquête
+                    </h3>
+                    <div id="step-1" class="my-3">
+                        <label for="title" class="form-label mt-2">Titre de l'enqête*</label>
+                        <input type="text" name="title" class="form-control" id="s-title">
+                        <label for="description" class="form-label mt-2">Description*</label>
+                        <input type="text" name="description" class="form-control" id="s-description">
+                    </div>
+                    <div id="step-2" class="my-3 d-none">
+                        <h3 class="card-title" id="survey-title">Titre</h3>
+                        <p class="card-subtitle" id="survey-subtitle">Description</p>
+                        <button class="btn btn-outline-secondary mt-3" id="add-question">Ajouter une question</button>
+                        <div class="my-3 d-none" id="add-question-form">
+                            <label for="question-title" class="form-label mt-2">Intitulé de la question*</label>
+                            <input type="text" name="question-title" class="form-control" id="question-title">
+                            <label for="question-type" class="form-label mt-2">Type de la réponse attendue*</label>
+                            <select class="form-select" name="question-type" aria-label="Default select example" id="question-type">
+                                <option selected value="">selectionner une valeur</option>
+                                <option value="nb">NOMBRE</option>
+                                <option value="hr">HEURE</option>
+                                <option value="dt">DATE</option>
+                                <option value="tx">TEXTE</option>
+                            </select>
+                            <button class="btn btn-outline-secondary mt-2" id="add-question-btn">Ajouter</button>
+                        </div>
+                        <ul class="list-group my-5 d-none" id="questions">
+                        </ul>
+                    </div>
+                    <button class="btn btn-primary mt-2 d-none" id="precedant">précédant</button>
+                    <button class="btn btn-primary mt-2" id="suivant">suivant</button>
+                    <button class="btn btn-primary mt-2 d-none" id="create">créer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}
+
+{% block inline_javascript %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        let survey = {
+            'title':'',
+            'description':'',
+            'questions':[]
+        }
+        // all of the DOM elements we are manipulated
+        const btn_precedant = document.getElementById('precedant');
+        const btn_suivant = document.getElementById('suivant');
+        const btn_creer = document.getElementById('create');
+        const step_1 = document.getElementById('step-1');
+        const step_2 = document.getElementById('step-2');
+        const survey_title = document.getElementById('s-title');
+        const survey_description = document.getElementById('s-description');
+        const $survey_title = document.getElementById('survey-title');
+        const $survey_description = document.getElementById('survey-subtitle');
+        const add_question = document.getElementById('add-question');
+        const add_question_form = document.getElementById('add-question-form');
+        const question_title = document.getElementById('question-title');
+        const question_type = document.getElementById('question-type');
+        const add_question_btn = document.getElementById('add-question-btn');
+        const questions = document.getElementById('questions');
+
+        btn_suivant.addEventListener('click', function(e){
+            if(survey_title.value==='' || survey_description.value===''){
+                if(survey_title.value === '' && !survey_title.classList.contains('border-danger'))
+                    survey_title.classList.add('border-danger');
+
+                if(survey_description.value === '' && !survey_description.classList.contains('border-danger'))
+                    survey_description.classList.add('border-danger');
+            }else{
+                survey_title.classList.remove('border-danger');
+                survey_description.classList.remove('border-danger');
+
+                survey['title'] = survey_title.value;
+                survey['description'] = survey_description.value;
+
+               $survey_title.innerText = survey['title'];
+               $survey_description.innerText =  survey['description'];
+
+                step_1.classList.add('d-none');
+                step_2.classList.remove('d-none');
+                btn_precedant.classList.remove('d-none');
+                btn_suivant.classList.add('d-none');
+                btn_creer.classList.remove('d-none');
+            }
+        });
+
+        btn_precedant.addEventListener('click', function(e){
+            step_2.classList.add('d-none');
+            step_1.classList.remove('d-none');
+            btn_precedant.classList.add('d-none');
+            btn_creer.classList.add('d-none');
+            btn_suivant.classList.remove('d-none');
+        });
+
+        add_question.addEventListener('click', function(e){
+            question_title.value = "";
+            question_type.value = "";
+            add_question.classList.add('d-none');
+            add_question_form.classList.remove('d-none');
+
+        })
+
+        add_question_btn.addEventListener('click', function(e){
+            if(question_title.value==='' || question_type.value===''){
+                if(question_title.value === '' && !question_type.classList.contains('border-danger'))
+                    question_title.classList.add('border-danger');
+
+                if(question_type.value === '' && !question_type.classList.contains('border-danger'))
+                    question_type.classList.add('border-danger');
+            }else{
+                add_question_form.classList.add('d-none');
+                add_question.classList.remove('d-none');
+
+               survey['questions'].push(
+                {'title':question_title.value, 'type':question_type.value}
+               );
+
+               var temp='';
+
+               survey['questions'].forEach(function(question){
+                console.log(question);
+                temp += "\
+                <li class='list-group-item'>"+question.title+"</li>\
+                ";
+               });
+
+               questions.innerHTML = temp;
+
+               questions.classList.remove('d-none');
+            }
+        })
+
+    });
+</script>
+{% endblock inline_javascript %}

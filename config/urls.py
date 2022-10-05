@@ -5,7 +5,13 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
-from surveymng.main.views import agent_looking, create_agent, index
+from surveymng.main.views import (
+    agent_looking,
+    create_agent,
+    create_survey,
+    index,
+    survey_lookup,
+)
 
 urlpatterns = [
     path("", index, name="home"),
@@ -21,6 +27,8 @@ urlpatterns = [
     # create agent
     path("create/agent", create_agent, name="create-agent"),
     path("search/agent", agent_looking, name="search-agent"),
+    path("create/survey", create_survey, name="create-survey"),
+    path("search/survey", survey_lookup, name="search-survey"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

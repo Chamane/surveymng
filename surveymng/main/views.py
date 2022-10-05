@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+from main.models import Survey
 
 from . import forms
 
@@ -51,7 +52,38 @@ def agent_looking(request):
 
 
 def create_survey(request):
-    pass
+    if request.method == "POST":
+        surveyForm = forms.SurveyForm(request.POST)
+        user = get_object_or_404(User, username=request.user.username)
+
+        if surveyForm.is_valid():
+            title = surveyForm.cleaned_data["title"]
+            description = surveyForm.cleaned_data["description"]
+            survey = Survey(title=title, description=description, created_by=user)
+            survey.save()
+            messages.success(request, "Enquête créer avec succès...")
+            return redirect("users:detail", username=request.user.username)
+    else:
+        surveyForm = forms.SurveyForm()
+
+    return render(request, "survey/create_survey.html", {"surveyForm": surveyForm})
+
+
+def survey_lookup(request):
+    try:
+        lookup_value = request.POST["lookup_value"]
+    except Exception:
+        lookup_value = None
+
+    if lookup_value:
+        try:
+            surveys = Survey.objects.filter(title__contains=lookup_value)
+        except Exception:
+            surveys = None
+    else:
+        surveys = None
+
+    return render(request, "survey/survey_looking.html", {"surveys": surveys})
 
 
 def create_formsurvey(request):

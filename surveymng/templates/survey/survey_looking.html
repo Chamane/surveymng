@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+{{block.super}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        Rechercher un questionnaire d'enquête
+                    </h3>
+                    <form action="{% url 'search-survey' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" class="form-control" name="lookup_value" placeholder="titre de l'enquête">
+                            </div>
+                            <div class="col-4">
+                                <input type="submit" class="btn btn-primary" value="rechercher">
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            {% if surveys %}
+                            <h4 class="card-title my-2">Liste des enquêtes correspondant: </h4>
+                            <ul class="list-group">
+                                {% for survey in surveys %}
+                                <li class="list-group-item">
+                                    <h5 class="card-title">{{survey.title}}</h5>
+                                    <p class="card-subtitle">{{survey.description}}</p>
+                                    <a href="#" class="btn btn-primary mt-2">Afficher</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>Aucun questionnaire avec ce titre trouvé. Essayez un autre keyword...</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}
