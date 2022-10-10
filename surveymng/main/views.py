@@ -1,7 +1,10 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from main.models import Survey
+from main.models import Question, Survey
 
 from . import forms
 
@@ -52,21 +55,7 @@ def agent_looking(request):
 
 
 def create_survey(request):
-    if request.method == "POST":
-        surveyForm = forms.SurveyForm(request.POST)
-        user = get_object_or_404(User, username=request.user.username)
-
-        if surveyForm.is_valid():
-            title = surveyForm.cleaned_data["title"]
-            description = surveyForm.cleaned_data["description"]
-            survey = Survey(title=title, description=description, created_by=user)
-            survey.save()
-            messages.success(request, "Enquête créer avec succès...")
-            return redirect("users:detail", username=request.user.username)
-    else:
-        surveyForm = forms.SurveyForm()
-
-    return render(request, "survey/create_survey.html", {"surveyForm": surveyForm})
+    return render(request, "survey/create_survey.html")
 
 
 def survey_lookup(request):
@@ -87,4 +76,45 @@ def survey_lookup(request):
 
 
 def create_formsurvey(request):
+    surveys = Survey.objects.all()
+    return render(request, "survey/create_formsurvey.html", {"surveys": surveys})
+
+
+def formsurvey_lookup(request):
     pass
+
+
+def ajax_create_survey(request):
+    surveyToCreate = json.load(request)["survey"]
+
+    user = get_object_or_404(User, pk=request.user.pk)
+
+    # print(surveyToCreate['title'])
+
+    # create survey
+    surveyCreated = Survey.objects.create(
+        title=surveyToCreate["title"],
+        description=surveyToCreate["description"],
+        created_by=user,
+    )
+
+    for question in surveyToCreate["questions"]:
+        Question.objects.create(
+            title=question["title"],
+            question_type=question["type"],
+            survey=surveyCreated,
+        )
+
+    #
+    messages.success(request, "L'enquête fut créer avec succès")
+
+    return JsonResponse(surveyToCreate)
+
+
+def ajax_get_questions(request):
+    survey_id = json.load(request)["survey_id"]
+    # survey = get_object_or_404(Survey, pk=survey_id)
+    questions = Question.objects.filter(survey__pk=survey_id)
+    print(questions)
+    data = {}
+    return JsonResponse(data)

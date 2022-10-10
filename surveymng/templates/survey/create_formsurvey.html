@@ -10,13 +10,18 @@
             <div class="card mt-3">
                 <div class="card-body">
                     <h3 class="card-title">
-                        Créer une enquête
+                        Créer un formulaire de réponse
                     </h3>
                     <div id="step-1" class="my-3">
-                        <label for="title" class="form-label mt-2">Titre de l'enqête*</label>
+                        <label for="title" class="form-label mt-2">Titre du formulaire de réponse*</label>
                         <input type="text" name="title" class="form-control" id="s-title">
-                        <label for="description" class="form-label mt-2">Description*</label>
-                        <input type="text" name="description" class="form-control" id="s-description">
+                        <label for="ssurvey" class="form-label mt-2">Enquête*</label>
+                        <select class="form-select" name="ssurvey" aria-label="Default select example" id="ssurvey">
+                            <option selected value="">selectionner une valeur</option>
+                            {% for survey in surveys  %}
+                            <option value="{{survey.pk}}">{{survey.title}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div id="step-2" class="my-3 d-none">
                         <h3 class="card-title" id="survey-title">Titre</h3>
@@ -58,7 +63,7 @@
             'questions':[]
         }
         const host = window.location.host;
-        const createSurveyURL = 'http://'+host+'/ajax/create-survey';
+        const getQuestionsURL = 'http://'+host+'/ajax/questions';
         const csrftoken = "{{csrf_token}}";
 
         // all of the DOM elements we are manipulated
@@ -68,7 +73,7 @@
         const step_1 = document.getElementById('step-1');
         const step_2 = document.getElementById('step-2');
         const survey_title = document.getElementById('s-title');
-        const survey_description = document.getElementById('s-description');
+        const survey_description = document.getElementById('ssurvey');
         const $survey_title = document.getElementById('survey-title');
         const $survey_description = document.getElementById('survey-subtitle');
         const add_question = document.getElementById('add-question');
@@ -101,6 +106,26 @@
                 btn_precedant.classList.remove('d-none');
                 btn_suivant.classList.add('d-none');
                 btn_creer.classList.remove('d-none');
+
+                /*** fetch questions related to the survey ***/
+                fetch(getQuestionsURL, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        "Access-Control-Allow-Origin": "*",
+                        'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify({'survey_id':survey_description.value}) //JavaScript object of data to POST
+                }).then(response => {
+                        return response.json() //Convert response to JSON
+                }).then(data => {
+                    console.log(data);
+                }).catch(error =>{
+                    alert(error);
+                });
+
+                /*** ask those questions ***/
             }
         });
 

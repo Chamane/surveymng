@@ -50,7 +50,7 @@
                 <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
               </li> -->
               <li class="nav-item">
-                <a class="nav-link" href="#">A propos</a>
+                <a class="nav-link" href="{% url 'home' %}">Acceuil</a>
               </li>
               {% if request.user.is_authenticated %}
                 <!-- <li class="nav-item">

@@ -7,8 +7,12 @@ from django.views.generic import TemplateView
 
 from surveymng.main.views import (
     agent_looking,
+    ajax_create_survey,
+    ajax_get_questions,
     create_agent,
+    create_formsurvey,
     create_survey,
+    formsurvey_lookup,
     index,
     survey_lookup,
 )
@@ -29,6 +33,10 @@ urlpatterns = [
     path("search/agent", agent_looking, name="search-agent"),
     path("create/survey", create_survey, name="create-survey"),
     path("search/survey", survey_lookup, name="search-survey"),
+    path("create/form-survey", create_formsurvey, name="create-formsurvey"),
+    path("search/form-survey", formsurvey_lookup, name="search-formsurvey"),
+    path("ajax/create-survey", ajax_create_survey, name="ajax-create-survey"),
+    path("ajax/questions", ajax_get_questions, name="ajax-get-question"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

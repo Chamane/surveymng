@@ -15,6 +15,7 @@
                     <form action="{% url 'create-agent' %}" method="post">
                         {{form|crispy}}
                         {% csrf_token %}
+                        <a href="{% url 'home' %}" class="btn btn-secondary">annuler</a>
                         <input type="submit" class="btn btn-primary" value="créer">
                     </form>
                 </div>
