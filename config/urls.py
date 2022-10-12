@@ -14,6 +14,7 @@ from surveymng.main.views import (
     create_formsurvey,
     create_survey,
     formsurvey_lookup,
+    get_formsurvey,
     index,
     survey_lookup,
 )
@@ -39,6 +40,7 @@ urlpatterns = [
     path("ajax/create-survey", ajax_create_survey, name="ajax-create-survey"),
     path("ajax/questions", ajax_get_questions, name="ajax-get-question"),
     path("ajax/post/formsurvey", ajax_post_formsurvey, name="ajax-post-formsurvey"),
+    path("formsurvey/<int:formsurvey_id>", get_formsurvey, name="get-formsurvey"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

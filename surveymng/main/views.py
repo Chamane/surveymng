@@ -81,7 +81,22 @@ def create_formsurvey(request):
 
 
 def formsurvey_lookup(request):
-    pass
+    try:
+        lookup_value = request.POST["lookup_value"]
+    except Exception:
+        lookup_value = None
+
+    if lookup_value:
+        try:
+            formsurveys = FormSurvey.objects.filter(title__contains=lookup_value)
+        except Exception:
+            formsurveys = None
+    else:
+        formsurveys = None
+
+    return render(
+        request, "survey/search_formsurvey.html", {"formsurveys": formsurveys}
+    )
 
 
 def ajax_create_survey(request):
@@ -145,12 +160,22 @@ def ajax_post_formsurvey(request):
     for question in formsurvey["questions"]:
         get_question = get_object_or_404(Question, pk=question["id"])
         Response.objects.create(
-            form_survey=get_formsurvey,
-            question=get_question,
-            content=question["value"],
-            created_by=user,
+            form_survey=get_formsurvey, question=get_question, content=question["value"]
         )
 
     messages.success(request, "Formulaire de réponse enregistré avec succès")
 
     return JsonResponse(formsurvey)
+
+
+def get_formsurvey(request, formsurvey_id):
+
+    formsurvey = get_object_or_404(FormSurvey, pk=formsurvey_id)
+
+    responses = Response.objects.filter(form_survey=formsurvey)
+
+    return render(
+        request,
+        "survey/get_formsurvey.html",
+        {"formsurvey": formsurvey, "responses": responses},
+    )

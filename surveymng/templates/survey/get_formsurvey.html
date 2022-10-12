@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+{{block.super}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Formulaire de réponse: {{formsurvey.title}}</h5>
+                    <p>Enquête: {{formsurvey.survey.title}}</p>
+                    <p>Objectif de l'enquête: {{formsurvey.survey.description}}</p>
+                    {% for response in responses %}
+                        <label for="{{response.id}}" class="form-label mt-2">{{response.question.title}}</label>
+                        <input type="text" value="{{response.content}}" class="form-control" disabled>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}
