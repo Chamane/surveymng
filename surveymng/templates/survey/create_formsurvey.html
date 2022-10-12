@@ -51,8 +51,8 @@
             'questions':[]
         }
         const host = window.location.host;
-        const getQuestionsURL = 'http://'+host+'/ajax/questions';
-        const postFormSurveyURL = 'http://'+host+'/ajax/post/formsurvey';
+        const getQuestionsURL = 'https://'+host+'/ajax/questions';
+        const postFormSurveyURL = 'https://'+host+'/ajax/post/formsurvey';
         const csrftoken = "{{csrf_token}}";
 
         // all of the DOM elements we are manipulated
@@ -120,13 +120,14 @@
                         label.classList.add('mt-2');
                         label.innerText = question.title;
                         label.for='question'+question.id;
-                        if(question.type=='tx'){
-                            input=document.createElement('input');
-                            input.type=question.type;
-                            input.classList.add('form-control');
-                            input.classList.add('question');
-                            input.id=question.id;
-                        }
+                        // if(question.type=='tx'){
+
+                        // }
+                        input=document.createElement('input');
+                        input.type=question.type;
+                        input.classList.add('form-control');
+                        input.classList.add('question');
+                        input.id=question.id;
                         div=document.createElement('div');
                         div.append(label);
                         div.append(input);
@@ -171,7 +172,7 @@
                 return response.json() //Convert response to JSON
             }).then(data => {
                 console.log(data);
-                window.location.replace('http://'+host);
+                window.location.replace('https://'+host);
             }).catch(error =>{
                 alert(error);
             });
