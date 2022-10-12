@@ -44,8 +44,9 @@
 {% block inline_javascript %}
 <script>
     window.addEventListener('DOMContentLoaded', () => {
-        let survey = {
-            'title':'',
+        let formsurvey = {
+            'formsurvey_title':'',
+            'survey':{'survey_id':'', 'survey_title':''},
             'description':'',
             'questions':[]
         }
@@ -81,11 +82,11 @@
                 survey_title.classList.remove('border-danger');
                 survey_description.classList.remove('border-danger');
 
-                survey['title'] = survey_title.value;
-                survey['description'] = survey_description.value;
+                formsurvey['formsurvey_title'] = survey_title.value;
+                formsurvey['survey']['id'] = survey_description.value;
 
-               $survey_title.innerText = survey['title'];
-               $survey_description.innerText =  survey['description'];
+               $survey_title.innerText = formsurvey['formsurvey_title'];
+               $survey_description.innerText =  formsurvey['survey']['id'];
 
                 step_1.classList.add('d-none');
                 step_2.classList.remove('d-none');
@@ -107,6 +108,7 @@
                         return response.json() //Convert response to JSON
                 }).then(data => {
                     console.log(data);
+                    formsurvey['survey']['survey_title']=data['survey_title'];
                     $survey_description.innerText =  data['survey_title'];
                     questions.innerHTML="";
                     // add questions in the dom
@@ -121,6 +123,8 @@
                             input=document.createElement('input');
                             input.type=question.type;
                             input.classList.add('form-control');
+                            input.classList.add('question');
+                            input.id=question.id;
                         }
                         div=document.createElement('div');
                         div.append(label);
@@ -143,41 +147,15 @@
             btn_suivant.classList.remove('d-none');
         });
 
-        add_question.addEventListener('click', function(e){
-            question_title.value = "";
-            question_type.value = "";
-            add_question.classList.add('d-none');
-            add_question_form.classList.remove('d-none');
-
-        })
-
         btn_creer.addEventListener('click', function(e){
-            if(survey.questions.length === 0){
-                alert("L'enquête doit avoir au moins une question avant d'être créer... Créer au moins une question d'abord!");
-            }else{
-                console.log(host);
-
-                fetch(createSurveyURL, {
-                    method: 'POST',
-                    headers:{
-                        'Accept': 'application/json',
-                        "Access-Control-Allow-Origin": "*",
-                        'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
-                        'X-CSRFToken': csrftoken,
-                    },
-                    body: JSON.stringify({'survey':survey}) //JavaScript object of data to POST
-                }).then(response => {
-                        return response.json() //Convert response to JSON
-                }).then(data => {
-                    console.log(data);
-                    // redirect to home page
-                    window.location.replace('http://'+host);
-                }).catch(error =>{
-                    alert(error);
-                });
-
-            }
-            e.preventDefault();
+            // get all the data
+            $questions = document.querySelectorAll('.question');
+            formsurvey['questions'] = [];
+            Array.from($questions).forEach(question =>{
+                formsurvey['questions'].push({'id':question.id, 'value':question.value});
+            });
+            console.log(formsurvey);
+            // post those data
         });
 
     });
