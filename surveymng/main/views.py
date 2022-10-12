@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from main.models import Question, Survey
+from main.models import FormSurvey, Question, Response, Survey
 
 from . import forms
 
@@ -125,3 +125,32 @@ def ajax_get_questions(request):
         }
         data["questions"].append(questionObj)
     return JsonResponse(data)
+
+
+def ajax_post_formsurvey(request):
+    formsurvey = json.load(request)["formsurvey"]
+
+    # get related survey
+    survey = get_object_or_404(Survey, pk=formsurvey["survey"]["id"])
+
+    # get related user
+    user = get_object_or_404(User, pk=request.user.id)
+
+    # create formsurvey
+    get_formsurvey = FormSurvey.objects.create(
+        title=formsurvey["formsurvey_title"], survey=survey, created_by=user
+    )
+
+    # create questions
+    for question in formsurvey["questions"]:
+        get_question = get_object_or_404(Question, pk=question["id"])
+        Response.objects.create(
+            form_survey=get_formsurvey,
+            question=get_question,
+            content=question["value"],
+            created_by=user,
+        )
+
+    messages.success(request, "Formulaire de réponse enregistré avec succès")
+
+    return JsonResponse(formsurvey)

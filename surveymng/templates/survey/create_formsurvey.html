@@ -52,6 +52,7 @@
         }
         const host = window.location.host;
         const getQuestionsURL = 'http://'+host+'/ajax/questions';
+        const postFormSurveyURL = 'http://'+host+'/ajax/post/formsurvey';
         const csrftoken = "{{csrf_token}}";
 
         // all of the DOM elements we are manipulated
@@ -155,7 +156,25 @@
                 formsurvey['questions'].push({'id':question.id, 'value':question.value});
             });
             console.log(formsurvey);
+
             // post those data
+            fetch(postFormSurveyURL, {
+                method: 'POST',
+                headers:{
+                    'Accept': 'application/json',
+                    "Access-Control-Allow-Origin": "*",
+                    'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({'formsurvey':formsurvey}) //JavaScript object of data to POST
+            }).then(response => {
+                return response.json() //Convert response to JSON
+            }).then(data => {
+                console.log(data);
+                window.location.replace('http://'+host);
+            }).catch(error =>{
+                alert(error);
+            });
         });
 
     });
