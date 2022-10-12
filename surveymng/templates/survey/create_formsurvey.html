@@ -27,8 +27,6 @@
                         <h3 class="card-title" id="survey-title">Titre</h3>
                         <p class="card-subtitle" id="survey-subtitle">Description</p>
                         <div class="my-3" id="questions">
-                            <label for="question-1" class="form-label">Comment t'appelles tu ?</label>
-                            <input type="text" name="question-1" id="question-1" class="form-control">
                         </div>
                         </ul>
                     </div>
@@ -65,7 +63,6 @@
         const survey_description = document.getElementById('ssurvey');
         const $survey_title = document.getElementById('survey-title');
         const $survey_description = document.getElementById('survey-subtitle');
-        const add_question = document.getElementById('add-question');
         const add_question_form = document.getElementById('add-question-form');
         const question_title = document.getElementById('question-title');
         const question_type = document.getElementById('question-type');
@@ -111,6 +108,25 @@
                 }).then(data => {
                     console.log(data);
                     $survey_description.innerText =  data['survey_title'];
+                    questions.innerHTML="";
+                    // add questions in the dom
+                    data['questions'].forEach(question => {
+                        // append element in questions
+                        label = document.createElement('label');
+                        label.classList.add('form-label');
+                        label.classList.add('mt-2');
+                        label.innerText = question.title;
+                        label.for='question'+question.id;
+                        if(question.type=='tx'){
+                            input=document.createElement('input');
+                            input.type=question.type;
+                            input.classList.add('form-control');
+                        }
+                        div=document.createElement('div');
+                        div.append(label);
+                        div.append(input);
+                        questions.append(div);
+                    });
                 }).catch(error =>{
                     alert(error);
                 });

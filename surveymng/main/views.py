@@ -118,6 +118,10 @@ def ajax_get_questions(request):
     print(questions)
     data = {"survey_title": survey.title, "questions": []}
     for question in questions:
-        questionObj = {"title": question.title, "type": question.question_type}
+        questionObj = {
+            "id": question.id,
+            "title": question.title,
+            "type": question.question_type,
+        }
         data["questions"].append(questionObj)
     return JsonResponse(data)
