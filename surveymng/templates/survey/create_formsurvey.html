@@ -26,21 +26,10 @@
                     <div id="step-2" class="my-3 d-none">
                         <h3 class="card-title" id="survey-title">Titre</h3>
                         <p class="card-subtitle" id="survey-subtitle">Description</p>
-                        <button class="btn btn-outline-secondary mt-3" id="add-question">Ajouter une question</button>
-                        <div class="my-3 d-none" id="add-question-form">
-                            <label for="question-title" class="form-label mt-2">Intitulé de la question*</label>
-                            <input type="text" name="question-title" class="form-control" id="question-title">
-                            <label for="question-type" class="form-label mt-2">Type de la réponse attendue*</label>
-                            <select class="form-select" name="question-type" aria-label="Default select example" id="question-type">
-                                <option selected value="">selectionner une valeur</option>
-                                <option value="nb">NOMBRE</option>
-                                <option value="hr">HEURE</option>
-                                <option value="dt">DATE</option>
-                                <option value="tx">TEXTE</option>
-                            </select>
-                            <button class="btn btn-outline-secondary mt-2" id="add-question-btn">Ajouter</button>
+                        <div class="my-3" id="questions">
+                            <label for="question-1" class="form-label">Comment t'appelles tu ?</label>
+                            <input type="text" name="question-1" id="question-1" class="form-control">
                         </div>
-                        <ul class="list-group my-5 d-none" id="questions">
                         </ul>
                     </div>
                     <a href="{% url 'home' %}" class="btn btn-secondary mt-2">annuler</a>
@@ -121,6 +110,7 @@
                         return response.json() //Convert response to JSON
                 }).then(data => {
                     console.log(data);
+                    $survey_description.innerText =  data['survey_title'];
                 }).catch(error =>{
                     alert(error);
                 });
@@ -143,35 +133,6 @@
             add_question.classList.add('d-none');
             add_question_form.classList.remove('d-none');
 
-        })
-
-        add_question_btn.addEventListener('click', function(e){
-            if(question_title.value==='' || question_type.value===''){
-                if(question_title.value === '' && !question_type.classList.contains('border-danger'))
-                    question_title.classList.add('border-danger');
-
-                if(question_type.value === '' && !question_type.classList.contains('border-danger'))
-                    question_type.classList.add('border-danger');
-            }else{
-                add_question_form.classList.add('d-none');
-                add_question.classList.remove('d-none');
-
-               survey['questions'].push(
-                {'title':question_title.value, 'type':question_type.value}
-               );
-
-               var temp='';
-
-               survey['questions'].forEach(function(question){
-                temp += "\
-                <li class='list-group-item'>"+question.title+"</li>\
-                ";
-               });
-
-               questions.innerHTML = temp;
-
-               questions.classList.remove('d-none');
-            }
         })
 
         btn_creer.addEventListener('click', function(e){

@@ -112,9 +112,12 @@ def ajax_create_survey(request):
 
 
 def ajax_get_questions(request):
-    survey_id = json.load(request)["survey_id"]
-    # survey = get_object_or_404(Survey, pk=survey_id)
+    survey_id = int(json.load(request)["survey_id"])
+    survey = get_object_or_404(Survey, pk=survey_id)
     questions = Question.objects.filter(survey__pk=survey_id)
     print(questions)
-    data = {}
+    data = {"survey_title": survey.title, "questions": []}
+    for question in questions:
+        questionObj = {"title": question.title, "type": question.question_type}
+        data["questions"].append(questionObj)
     return JsonResponse(data)
