@@ -50,9 +50,13 @@
             'description':'',
             'questions':[]
         }
-        const host = window.location.host;
-        const getQuestionsURL = 'https://'+host+'/ajax/questions';
-        const postFormSurveyURL = 'https://'+host+'/ajax/post/formsurvey';
+        let host = window.location.host;
+        if(host=='localhost:8000' || host=='127.0.0.1:8000')
+            host = 'http://'+host;
+        else
+            host = 'https://'+host;
+        const getQuestionsURL = host+'/ajax/questions';
+        const postFormSurveyURL = host+'/ajax/post/formsurvey';
         const csrftoken = "{{csrf_token}}";
 
         // all of the DOM elements we are manipulated
@@ -172,7 +176,7 @@
                 return response.json() //Convert response to JSON
             }).then(data => {
                 console.log(data);
-                window.location.replace('https://'+host);
+                window.location.replace(host);
             }).catch(error =>{
                 alert(error);
             });

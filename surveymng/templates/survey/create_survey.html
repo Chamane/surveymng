@@ -57,8 +57,12 @@
             'description':'',
             'questions':[]
         }
-        const host = window.location.host;
-        const createSurveyURL = 'https://'+host+'/ajax/create-survey';
+        let host = window.location.host;
+        if(host=='localhost:8000' || host=='127.0.0.1:8000')
+            host = 'http://'+host;
+        else
+            host = 'https://'+host;
+        const createSurveyURL = host+'/ajax/create-survey';
         const csrftoken = "{{csrf_token}}";
 
         // all of the DOM elements we are manipulated
@@ -169,7 +173,7 @@
                 }).then(data => {
                     console.log(data);
                     // redirect to home page
-                    window.location.replace('https://'+host);
+                    window.location.replace(host);
                 }).catch(error =>{
                     alert(error);
                 });

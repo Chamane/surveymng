@@ -25,9 +25,9 @@ def create_agent(request):
                     name=form.cleaned_data["fullname"],
                     email=form.cleaned_data["email"],
                 )
-                user.save()
                 user.set_password(form.cleaned_data["password"])
-                messages.success(request, "User succesfully created")
+                user.save()
+                messages.success(request, f"User {user.username} succesfully created")
                 return redirect("users:detail", username=request.user.username)
             else:
                 messages.error(request, "Password didnt match")
@@ -45,13 +45,13 @@ def agent_looking(request):
 
     if lookup_value:
         try:
-            user = User.objects.get(username=lookup_value)
+            user = User.objects.filter(username__contains=lookup_value)
         except Exception:
             user = None
     else:
         user = None
 
-    return render(request, "survey/agent_looking.html", {"agent": user})
+    return render(request, "survey/agent_looking.html", {"agents": user})
 
 
 def create_survey(request):
