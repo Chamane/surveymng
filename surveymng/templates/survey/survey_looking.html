@@ -33,7 +33,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{survey.title}}</h5>
                             <p class="card-subtitle">{{survey.description}}</p>
-                            <a href="#" class="btn btn-primary mt-2">Afficher</a>
+                            <a href="{% url 'get-survey' survey.id %}" class="btn btn-primary mt-2">Afficher</a>
                         </div>
                     </div>
                     {% endfor %}

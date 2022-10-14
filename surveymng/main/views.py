@@ -179,3 +179,16 @@ def get_formsurvey(request, formsurvey_id):
         "survey/get_formsurvey.html",
         {"formsurvey": formsurvey, "responses": responses},
     )
+
+
+def get_survey(request, survey_id):
+
+    survey = get_object_or_404(Survey, pk=survey_id)
+
+    formsurvey = FormSurvey.objects.filter(survey=survey)
+
+    return render(
+        request,
+        "survey/get_survey.html",
+        {"survey": survey, "formsurvey": formsurvey},
+    )

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+{{block.super}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Enquête: {{survey.title}}</h5>
+                    <p>Objectif de l'enquête: {{survey.description}}</p>
+                    <p>Créer par {{survey.created_by}} le {{survey.date_created}}</p>
+
+                    <h5 class="mt-2">Liste des réponses:</h5>
+                    {% for form in formsurvey %}
+                        <a href="{% url 'get-formsurvey' form.id %}">{{form.title}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}
